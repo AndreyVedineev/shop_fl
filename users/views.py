@@ -6,9 +6,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-# from carts.models import Cart
+
 # from orders.models import Order, OrderItem
 
+from carts.models import Cart
 from users.forms import ProfileForm, UserLoginForm, UserRegistrationForm
 
 
@@ -26,8 +27,8 @@ def login(request):
                 auth.login(request, user)
                 messages.success(request, f"{username}, Вы вошли в аккаунт")
 
-                # if session_key:
-                #     Cart.objects.filter(session_key=session_key).update(user=user)
+                if session_key:
+                    Cart.objects.filter(session_key=session_key).update(user=user)
 
                 redirect_page = request.POST.get("next", None)
                 if redirect_page and redirect_page != reverse("user:logout"):
@@ -47,13 +48,13 @@ def registration(request):
         if form.is_valid():
             form.save()
 
-            # session_key = request.session.session_key
+            session_key = request.session.session_key
 
             user = form.instance
             auth.login(request, user)
 
-            # if session_key:
-            #     Cart.objects.filter(session_key=session_key).update(user=user)
+            if session_key:
+                Cart.objects.filter(session_key=session_key).update(user=user)
             messages.success(
                 request,
                 f"{user.username}, Вы успешно зарегистрированы и вошли в аккаунт",
@@ -103,6 +104,3 @@ def logout(request):
     messages.success(request, f"{request.user.username}, Вы вышли из аккаунта")
     auth.logout(request)
     return redirect(reverse("main:index"))
-
-
-
