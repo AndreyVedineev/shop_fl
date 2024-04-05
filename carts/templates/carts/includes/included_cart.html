@@ -15,7 +15,7 @@
                                     data-cart-id="{{ cart.id }}"
                                     data-cart-change-url="{% url "cart:cart_change" %}">
                                     {% csrf_token %}
-                                    </button>
+                                    -</button>
                             </span>
                             <input type="text" class="form-control number" value="{{ cart.quantity }}"
                                 readonly>
